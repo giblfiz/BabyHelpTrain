@@ -16,8 +16,7 @@ $auth_token = TWILLIO_AUTH_TOKEN;
 
 // A Twilio number you own with SMS capabilities
 $twilio_number = BHT_TWILLIO_NUMBER;
-echo $twilio_number;
-//(610) 854-8401
+
 
 $client = new Client($account_sid, $auth_token);
 $client->messages->create(
