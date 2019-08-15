@@ -7,6 +7,7 @@ https://www.twilio.com/docs/sms/tutorials/how-to-create-sms-conversations-php
 
 =====Running the scrappy Crappy Version of things:=====
 Run composer to populate the vendor folder
+I'm going to be using sqlite3 as the database for a while instead of mysql
 
 
 php -S localhost:8000
