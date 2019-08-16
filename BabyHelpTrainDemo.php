@@ -35,8 +35,7 @@ function recordDateOptions($dates){
     $type = SCHEDULE_A_TIME;
     $db = DB::getDB();
     $sms_id = $db->stubSentSms(1);
-    $dates = getPotentalDates("fake calendar");
-    foreach ($dates as $key => $date){
+    foreach ($dates as $key => $date){       
         $db->putOption($sms_id, $key, $date, $type); //
     }
     return $sms_id;
@@ -51,12 +50,9 @@ function promptDateOptions($dates, $sms_id){
     
     // A Twilio number you own with SMS capabilities
     $twilio_number = BHT_TWILLIO_NUMBER;
-    
-    
+        
     $client = new Client($account_sid, $auth_token);
 
-    
-    
     $body = "Are you avalible to schedule a visit with the new baby on:" ."\n";
     $body .= '(#1): ' . $dates[1]->format(DateTime::RFC2822) . "\n";
     $body .= '(#2): ' . $dates[2]->format(DateTime::RFC2822) . "\n";
