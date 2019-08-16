@@ -27,27 +27,27 @@ class DB {
    */
   private function exec($command){
     if($this->debug_level >= 2){
-        echo $command . " \n";
+      devlog($command);
     }
     try{
       return $this->pdo->exec($command);
     } catch (exception $e){
         if($this->debug_level){
-            echo "EXCEPTION: " .  $e->getMessage();
+          devlog("EXCEPTION: " .  $e->getMessage());
         }
     }
   }
   
   private function query($command){
     if($this->debug_level >= 2){
-        echo $command . " \n";
+      devlog($command);
     }
     try{
       return $this->pdo->query($command);
     } catch (exception $e){
         if($this->debug_level){
-            echo "EXCEPTION: " .  $e->getMessage();
-        }
+            devlog("EXCEPTION: " .  $e->getMessage());
+       }
     }
     
   }
@@ -57,7 +57,7 @@ class DB {
     return $this->pdo->lastInsertId();
   }
   
-  public function putSentSms(){
+  public function updateSentSms(){
     
   }
   
@@ -66,6 +66,17 @@ class DB {
     $this->exec("INSERT INTO option (content, code, created_on, type_row_id, sent_row_id) VALUES ( '". $date->format(DateTime::RFC2822) ."' ,". $code .",". time() .",". $type .",". $sms_id ." )");
   }
 
+  public function getLastSms($responder_phone_number){
+        return $this->query("SELECT max(sent_sms.rowid) FROM person LEFT JOIN
+                 sent_sms ON (person.rowid = sent_sms.person_row_id) 
+                 WHERE person.phone = '$responder_phone_number' ");
+  }
+  
+  public function getOptionsFromSms($sent_sms_rowid){
+    return $this->query("SELECT * FROM option 
+                 WHERE sent_row_id = '$sent_sms_rowid' ");    
+  }
+  
 }
  
 

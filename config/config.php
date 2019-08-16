@@ -11,3 +11,9 @@ define(DEV_PHONE_NUMBER, '+16102206245');
  */
 define(SCHEDULE_A_TIME, '1');
  
+
+function devlog($value){
+    file_put_contents("developer_log.txt",
+        $value . "\n",
+        FILE_APPEND);
+    }

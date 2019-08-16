@@ -11,14 +11,14 @@ require __DIR__ . '/config/secrets.php';
 require __DIR__ . '/config/config.php';
 
 require __DIR__ . '/person.php'; //define a person
+require __DIR__ . '/database/database.php';
+
 
 
 //Ok, lets add this to the users google clander
 
-/**
- * Returns an authorized API client.
- * @return Google_Client the authorized client object
- */
+// * Returns an authorized API client.
+// * @return Google_Client the authorized client object
 function getClient()
 {
     $client = new Google_Client();
@@ -57,6 +57,8 @@ function getClient()
 
 function addEvent($service, $calendarId, Person $who, DateTime $when){
     
+    //devlog($when);
+    
     $event = new Google_Service_Calendar_Event(array(
       'summary' => $who->name . ' visits the home',
       'location' => '800 Howard St., San Francisco, CA 94103',
@@ -88,6 +90,7 @@ function addEvent($service, $calendarId, Person $who, DateTime $when){
     $event = $service->events->insert($calendarId, $event);
 }
 
+
 function getCalendarTypes($client){
     $service = new Google_Service_Calendar($client);    
     $results = $service->calendarList->listCalendarList();
@@ -105,6 +108,8 @@ function getCalIdByName($client, $name = "helpTrain"){
 }
 
 
+
+
 //Ok, now we do the actual work of adding the date to the calendar:
 $client = getClient();
 $service = new Google_Service_Calendar($client);  //<- global-ish
@@ -112,17 +117,49 @@ $service = new Google_Service_Calendar($client);  //<- global-ish
 $calendarId = getCalIdByName($client);
 $now = new DateTime();
 $later = $now->add(new DateInterval('P'.rand(1,14).'D'));
-addEvent($service,
-         $calendarId,
-         new Person("Harry","giblfiz@gmail.com","6102206245"),
-         $later);
+//addEvent($service,
+//         $calendarId,
+//         new Person("Harry","giblfiz@gmail.com","6102206245"),
+//         $later);
 
+
+$db = DB::getDB();
+$db->debug_level = 3;
+$lastSms = $db->getLastSms($_REQUEST['From'])->fetch();
+$oldOptionsPDO = $db->getOptionsFromSms(array_shift($lastSms));
+foreach($oldOptionsPDO as $m){
+    devlog(print_r($m, true));
+    $oldOptions[] = $m;
+    if($_REQUEST['Body'] == $m["code"]){
+        devlog("found it! " . $m["code"] );
+        $date = DateTime::createFromFormat(DateTime::RFC2822, $m[0] );
+        devlog($date->format(DateTime::RFC2822));
+
+        
+    }
+}
+
+devlog($selectedOptionValue);
+if($date !== NULL){
+    
+    devlog($date->format(DateTime::RFC2822));
+    
+    addEvent($service,
+             $calendarId,
+             new Person("Harry","giblfiz@gmail.com","6102206245"),
+             $date);    
+    $response = new MessagingResponse();
+    $response->message(
+        "Ok, you have been added to the calendar for "  . $date->format(DateTime::RFC2822)
+    );
+} else {
+    $response = new MessagingResponse();
+    $response->message(
+        "Sorry, this system is in Beta and did not understand your response"
+    );
+}
 
 
 // Set the content-type to XML to send back TwiML from the PHP Helper Library
 header("content-type: text/xml");
-$response = new MessagingResponse();
-$response->message(
-    "Ok, you have been added to the calendar for " . $later->format(DateTime::RFC2822)
-);
 echo $response;
