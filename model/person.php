@@ -1,16 +1,24 @@
 <?php
- class Person {
-    public $name;
-    public $email;
-    public $phone;
+require "tableClass.php";
+
+class Person extends tableClass{ 
+    public  $firstName;
+    public  $lastName;
+    public  $createdOn;
+    public  $email;
+    public  $phone;
+    public  $rowid;
     
-    //function __construct($name, $email, $phone){
-    //    $this->email = $email;
-    //    $this->name = $name;
-    //    $this->phone = $phone;
-    //}
+   static function getById($id){
+    $values = DB::DB()->query("SELECT * FROM person WHERE rowid = $rowid")->fetch();
+    $p = new Person();
+    print_r($values);
+ 
+   }
+   
+
     
-    function __construct($rowid){
+    function __construct(){
      
     }
     
