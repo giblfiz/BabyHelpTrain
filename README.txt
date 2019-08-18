@@ -1,3 +1,10 @@
+WHHAAAA!!!
+I don't want to use a framework!!
+I don't want to do unit testing!!!
+
+I'm totally going to put this off as long as I can. The joys of personal projects. 
+
+
 Calendar API docs:
 https://developers.google.com/calendar/v3/reference/calendarList/get
 
