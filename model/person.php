@@ -1,26 +1,29 @@
 <?php
-require "tableClass.php";
+require_once "tableClass.php";
 
 class Person extends tableClass{ 
-    public  $firstName;
-    public  $lastName;
-    public  $createdOn;
-    public  $email;
-    public  $phone;
-    public  $rowid;
+
+    function getMaxId(){
+      echo "ff";      
+        $r = DB::DB()->query("SELECT MAX(rowid) from person");
+         echo "ff";
+        print_r($r);
+//        return $r->fetch()['MAX(rowid)'];
+    }
+
     
-   static function getById($id){
+   static function getById($rowid){
     $values = DB::DB()->query("SELECT * FROM person WHERE rowid = $rowid")->fetch();
-    $p = new Person();
-    print_r($values);
- 
+    $p = new Option($values, $rowid);
+    return $p;
    }
    
 
     
-    function __construct(){
-     
-    }
-    
+   function __construct($values, $id){
+     $this->values = $values;
+     $this->rowid = $id;
+   }
+        
  }
  

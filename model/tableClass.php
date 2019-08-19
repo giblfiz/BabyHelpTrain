@@ -7,14 +7,29 @@
  *I'm taking the super lazy 
  **/
 abstract class tableClass {
-    __call($method, $params){
+    protected $rowid;
+    protected $dirty;
+    protected $values;
+    protected $tableName;
+        
+    function setId($id){
+        $this->rowid = $id;
+    }
+    
+    function getId(){
+        return $this->rowid;
+    }
+    
+    function __call($method, $params){
       $var = lcfirst(substr($method, 3));
 
      if (strncasecmp($method, "get", 3) === 0) {
-         return $this->$var;
+         return $this->values[$var];
      }
      if (strncasecmp($method, "set", 3) === 0) {
-         $this->$var = $params[0];
+         $this->values[$var] = $params[0];
+         $this->dirty = true;
      }
     }
+    
 }

@@ -24,7 +24,7 @@ class DB {
    *This is a wrapper that lets us build in debugging
    *as well as error catching, and insertion attack defense
    */
-  private function exec($command){
+  public function exec($command){
     if($this->debug_level >= 2){
       devlog($command);
     }
@@ -37,7 +37,7 @@ class DB {
     }
   }
   
-  private function query($command){
+  public function query($command){
     if($this->debug_level >= 2){
       devlog($command);
     }
@@ -49,6 +49,14 @@ class DB {
        }
     }
     
+  }
+  
+  public function getMaxId($table){
+    $r = DB::DB()->query("SELECT MAX(rowid) FROM " .$table );
+print_r($r);
+
+    return $r->fetch()['MAX(rowid)'];
+
   }
   
   public function stubSentSms($person_id){
