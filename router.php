@@ -2,6 +2,8 @@
 //Router!!!
 require_once "vendor/autoload.php";
 use Twilio\TwiML\MessagingResponse;
+use Twilio\Rest\Client;
+
 require __DIR__ . '/config/secrets.php';
 require __DIR__ . '/config/config.php';
 require "database/database.php";

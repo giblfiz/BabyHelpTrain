@@ -30,6 +30,9 @@ class DB {
     }
     try{
       $this->pdo->exec($command);
+      if($this->debug_level >= 2){
+        devlog("Inserted rowid = " .$this->pdo->lastInsertId());
+      }
       return $this->pdo->lastInsertId(); // in case we did an insert
 
     } catch (exception $e){
