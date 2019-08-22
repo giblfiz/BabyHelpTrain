@@ -29,7 +29,9 @@ class DB {
       devlog($command);
     }
     try{
-      return $this->pdo->exec($command);
+      $this->pdo->exec($command);
+      return $this->pdo->lastInsertId(); // in case we did an insert
+
     } catch (exception $e){
         if($this->debug_level){
           devlog("EXCEPTION: " .  $e->getMessage());
@@ -58,21 +60,11 @@ print_r($r);
     return $r->fetch()['MAX(rowid)'];
 
   }
-  
-  public function stubSentSms($person_id){
-    $this->exec("INSERT INTO sent_sms (created_on, person_row_id) VALUES (". time() . ", " . $person_id .")");
-    return $this->pdo->lastInsertId();
-  }
-  
+   
   public function updateSentSms(){
     
   }
   
-  public function putOption($sms_id, $code, $date, $type){
-    //format(DateTime::RFC2822)
-    $this->exec("INSERT INTO option (content, code, created_on, type_row_id, sent_row_id) VALUES ( '". $date->format(DateTime::RFC2822) ."' ,". $code .",". time() .",". $type .",". $sms_id ." )");
-  }
-
   public function getLastSms($responder_phone_number){
         return $this->query("SELECT max(sent_sms.rowid) FROM person LEFT JOIN
                  sent_sms ON (person.rowid = sent_sms.person_row_id) 

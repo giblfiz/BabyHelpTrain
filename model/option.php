@@ -12,6 +12,11 @@ class Option extends tableClass{
    }
    
 
+     public function putOption($sms_id, $code, $date, $type){
+    //format(DateTime::RFC2822)
+    $this->exec("INSERT INTO option (content, code, created_on, type_row_id, sent_row_id) VALUES ( '". $date->format(DateTime::RFC2822) ."' ,". $code .",". time() .",". $type .",". $sms_id ." )");
+   }
+
     
     function __construct($values){
      $this->values = $values;

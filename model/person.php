@@ -14,7 +14,7 @@ class Person extends tableClass{
     
    static function getById($rowid){
     $values = DB::DB()->query("SELECT * FROM person WHERE rowid = $rowid")->fetch();
-    $p = new Option($values, $rowid);
+    $p = new Person($values, $rowid);
     return $p;
    }
    
@@ -23,6 +23,7 @@ class Person extends tableClass{
    function __construct($values, $id){
      $this->values = $values;
      $this->rowid = $id;
+     $this->tableName = "person";
    }
         
  }
