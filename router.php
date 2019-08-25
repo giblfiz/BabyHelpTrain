@@ -9,6 +9,9 @@ require __DIR__ . '/config/config.php';
 require "database/database.php";
 
 
+//hopefully the autoloaders will have kicked in by now. 
+session_start(); // Initialize the session
+
 
 //Auto include any class that is called
 spl_autoload_register(function ($class_name){
@@ -20,9 +23,21 @@ spl_autoload_register(function ($class_name){
     }
 });
  
-
+ 
+function getCurrentUser(){
+    if(isset($_SESSION['Guardian'])){
+        return $_SESSION['Guardian']; 
+    }
+}
+ 
+ 
 
 //Load the file in question
 
-require __dir__ . "/controler/" . $_SERVER["REQUEST_URI"] . ".php";
+require __dir__ . "/controler/" . $_SERVER["SCRIPT_NAME"] . ".php";
+
+//if(!isset($_SESSION["loggedin"])){
+//    header("location: login");
+//    exit;
+//}
 

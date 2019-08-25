@@ -4,12 +4,10 @@ require_once "tableClass.php";
 class Person extends tableClass{ 
 
     function getMaxId(){
-      echo "ff";      
         $r = DB::DB()->query("SELECT MAX(rowid) from person");
-         echo "ff";
-        print_r($r);
-//        return $r->fetch()['MAX(rowid)'];
+        return $r->fetch()['MAX(rowid)'];
     }
+
 
     
    static function getById($rowid){
@@ -18,6 +16,11 @@ class Person extends tableClass{
     return $p;
    }
    
+   static function getByEmail($email){
+    $values = DB::DB()->query("SELECT *, rowid FROM person WHERE email = '$email'")->fetch();
+    $p = new Person($values, $values["rowid"]);
+    return $p;
+   }
 
     
    function __construct($values, $id){
